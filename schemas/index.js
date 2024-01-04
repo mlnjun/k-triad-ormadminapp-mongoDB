@@ -1,24 +1,26 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-
 const connect = () => {
-if (process.env.NODE_ENV !== 'production') {
-  mongoose.set('debug', true);
-}
+  if (process.env.NODE_ENV !== 'production') {
+    mongoose.set('debug', true);
+  }
 
-
-mongoose.connect(`mongodb://${process.env.DB_ID}:${process.env.DB_PW}@localhost:27017/admin`, {
-  dbName: 'orm_admin',
-  //useNewUrlParser: true,
-  //useCreateIndex: true,
-  }, (error) => {
-    if (error) {
-      console.log('몽고디비 연결 에러', error);
-    } else {
-      console.log('몽고디비 연결 성공');
-    }
-});
+  mongoose.connect(
+    `mongodb://${process.env.DB_ID}:${process.env.DB_PW}@localhost:27017/admin`,
+    {
+      dbName: 'orm_admin',
+      //useNewUrlParser: true,
+      //useCreateIndex: true,
+    },
+    (error) => {
+      if (error) {
+        console.log('몽고디비 연결 에러', error);
+      } else {
+        console.log('몽고디비 연결 성공');
+      }
+    },
+  );
 };
 mongoose.connection.on('error', (error) => {
   console.error('몽고디비 연결 에러', error);
@@ -29,13 +31,11 @@ mongoose.connection.on('disconnected', () => {
   connect();
 });
 
-
-require('./models/admin');
+require('./admin');
 require('./member');
 // require('./channel');
 // require('./channelMember');
-require('./models/channelMessage');
+require('./channelMessage');
 require('./article');
-
 
 module.exports = connect;
